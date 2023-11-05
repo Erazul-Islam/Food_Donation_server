@@ -26,14 +26,21 @@ async function run() {
         await client.connect();
 
         const foodCollection = client.db('foods-services').collection('featured-foods')
-        // console.log(foodCollection)
+        const availableCollection = client.db('available-foods').collection('foods')
 
         app.get('/add',async (req,res) => {
             const cursor = foodCollection.find();
             const result = await cursor.toArray();
             res.send(result)
-            console.log(result)
+            // console.log(result)
         })
+
+        app.get('/avail',async (req,res) => {
+            const cursor = availableCollection.find();
+            const result = await cursor.toArray()
+            res.send(result)
+        })
+
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
