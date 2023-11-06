@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -28,25 +28,39 @@ async function run() {
         const foodCollection = client.db('foods-services').collection('featured-foods')
         const availableCollection = client.db('available-foods').collection('foods')
 
-        app.get('/add',async (req,res) => {
+        app.get('/add', async (req, res) => {
             const cursor = foodCollection.find();
             const result = await cursor.toArray();
             res.send(result)
             // console.log(result)
         })
 
-        app.get('/avail',async (req,res) => {
+        app.get('/avail', async (req, res) => {
             const cursor = availableCollection.find();
             const result = await cursor.toArray()
             res.send(result)
         })
 
-        app.post('/avail',async (req,res) => {
+        app.get('/avail/:id', async (req,res) => {
+            const id = req.params.id;
+            const query = {_id: new ObjectId(id)}
+            const result = await availableCollection.findOne(query)
+            res.send(result)
+        })
+
+        app.post('/avail', async (req, res) => {
             const newFood = req.body;
             console.log(newFood)
 
             const result = await availableCollection.insertOne(newFood)
             res.send(result);
+        })
+
+        app.delete('/avail/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await availableCollection.deleteOne(query)
+            res.send(result)
         })
 
 
