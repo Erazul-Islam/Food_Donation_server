@@ -27,6 +27,7 @@ async function run() {
 
         const foodCollection = client.db('foods-services').collection('featured-foods')
         const availableCollection = client.db('available-foods').collection('foods')
+        const requestCollection = client.db('reqCollection').collection('req')
 
         app.get('/add', async (req, res) => {
             const cursor = foodCollection.find();
@@ -67,6 +68,18 @@ async function run() {
                 }
             }
             const result = await availableCollection.updateOne(filter,food,options)
+            res.send(result)
+        })
+
+        app.post('/request',async (req,res) => {
+            const reqFood = req.body
+            const result = await requestCollection.insertOne(reqFood)
+            res.send(result)
+        })
+
+        app.get('/request', async (req,res) => {
+            const cursor = requestCollection.find();
+            const result = await cursor.toArray();
             res.send(result)
         })
 
