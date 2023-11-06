@@ -48,6 +48,28 @@ async function run() {
             res.send(result)
         })
 
+        app.put('/avail/:id', async (req,res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id)}
+            const options = {upsert: true}
+            const updatedFood = req.body
+            const food = {
+                $set: {
+                    food_name:updatedFood.food_name,
+                    image:updatedFood.image,
+                    food_quantity:updatedFood.food_quantity,
+                    picup_Location:updatedFood.picup_Location,
+                    expired_date:updatedFood.expired_date,
+                    additional_note:updatedFood.additional_note,
+                    donator_img:updatedFood.donator_img,
+                    donator_name:updatedFood.donator_name,
+                    email:updatedFood.email,
+                }
+            }
+            const result = await availableCollection.updateOne(filter,food,options)
+            res.send(result)
+        })
+
         app.post('/avail', async (req, res) => {
             const newFood = req.body;
             console.log(newFood)
