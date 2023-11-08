@@ -1,12 +1,15 @@
 const express = require('express');
 const cors = require('cors');
+const jwt = require('jsonwebtoken')
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 5000;
+// rquire('dotenv').config()
 
 app.use(cors());
 app.use(express.json())
 
+console.log(process.env.ACCESS_TOKEN)
 
 
 const uri = "mongodb+srv://food-zone:op5uDwOaApRJ2Gz6@cluster0.35nuqgc.mongodb.net/?retryWrites=true&w=majority";
@@ -28,6 +31,8 @@ async function run() {
         const foodCollection = client.db('foods-services').collection('featured-foods')
         const availableCollection = client.db('available-foods').collection('foods')
         const requestCollection = client.db('reqCollection').collection('req')
+
+
 
         app.get('/add', async (req, res) => {
             const cursor = foodCollection.find();
@@ -85,9 +90,9 @@ async function run() {
 
         app.delete('/request/:id', async (req, res) => {
             const id = req.params.id;
-            const query = { _id: new ObjectId(id) }
+            const query = {_id: new ObjectId(id)}
             const result = await requestCollection.deleteOne(query)
-            res.send(result)
+            res.send(result)  
         })
 
         app.post('/avail', async (req, res) => {
