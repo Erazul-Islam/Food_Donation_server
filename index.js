@@ -1,15 +1,18 @@
 const express = require('express');
 const cors = require('cors');
-const jwt = require('jsonwebtoken')
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 5000;
-// rquire('dotenv').config()
 
-app.use(cors());
+app.use(cors({
+    origin: [
+        'https://food-wave-dba6f.web.app',
+        'https://food-wave-dba6f.firebaseapp.com'
+    ],
+    credentials: true
+}));
 app.use(express.json())
 
-console.log(process.env.ACCESS_TOKEN)
 
 
 const uri = "mongodb+srv://food-zone:op5uDwOaApRJ2Gz6@cluster0.35nuqgc.mongodb.net/?retryWrites=true&w=majority";
@@ -26,7 +29,7 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
+        // await client.connect();
 
         const foodCollection = client.db('foods-services').collection('featured-foods')
         const availableCollection = client.db('available-foods').collection('foods')
