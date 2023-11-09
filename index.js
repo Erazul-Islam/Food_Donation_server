@@ -6,7 +6,7 @@ const port = process.env.PORT || 5000;
 
 app.use(cors({
     origin: [
-        'https://food-wave-dba6f.web.app',
+        ' http://localhost:5173',
         'https://food-wave-dba6f.firebaseapp.com'
     ],
     credentials: true
